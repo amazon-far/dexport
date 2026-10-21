@@ -1,0 +1,15 @@
+# Python caches and build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+.ruff_cache/
+
+# Run outputs and recordings (collection writes data/ under the working directory)
+/data/
+outputs/
+logs/
+wandb/
+*.zarr

@@ -1,0 +1,19 @@
+# Screwdriver with the in-hand rotation skill: Wuji 1, left hand, wrist camera.
+#   python -m dexport.collect --config configs/collect/wuji1_screwdriver.yaml
+# All keys and defaults: dexport/collect/config.py.
+hand_model: wuji1
+hand:
+  left: {enabled: true}
+cameras:
+  - {key: left_rgb, index: 0}  # index N = /dev/videoN (v4l2-ctl --list-devices); 224x224 @ 30 fps
+trajectory:
+  save_dir: data  # relative to the working directory
+  tag: screwdriver
+  save_pose_l: true
+  save_quat_l: true
+  save_pose_r: false
+  save_quat_r: false
+rotation_skill:  # the grip enters screw mode, which runs this actor
+  # Relative to the repository root. The shipped actor is a random placeholder: replace it with one
+  # trained in sim/ (checkpoints/rotation_skill/README.md).
+  ckpt: checkpoints/rotation_skill/model.pt

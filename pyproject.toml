@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dexport"
+version = "0.1.0"
+description = "DexPort: a hand-held skill interface for dexterous hand data collection, with diffusion-policy training and robot deployment."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"]
+authors = [{ name = "The DexPort Authors" }]
+requires-python = ">=3.11"
+dependencies = ["numpy", "scipy", "pyyaml"]
+
+[project.urls]
+Homepage = "https://amberxie88.github.io/dexport/index.html"
+
+[project.optional-dependencies]
+# Policy training: python -m dexport.minbc.train
+train = ["dexport[policy,recordings]", "tyro>=1.0", "numcodecs", "tensorboard"]
+# Weights & Biases logging: python -m dexport.minbc.train ... --use-wandb
+wandb = ["wandb"]
+# Demonstration collection (python -m dexport.collect) and the dataset scripts
+collect = [
+    "dexport[recordings,hands]",
+    "opencv-python",
+    "torch",  # the in-hand rotation skill; a CPU build is enough
+    # oculus_reader's adb client, which PyPI has only as pre-releases
+    "pure-python-adb==0.3.0.dev0",
+    "oculus_reader @ git+https://github.com/rail-berkeley/oculus_reader.git@17bc7b3923f5754d70c4e358867a3bcac1a3c0c3",
+]
+# Robot deployment: python -m dexport.deploy (--replay reads recordings)
+deploy = [
+    "dexport[policy,recordings,hands]",
+    "opencv-python",
+    "pyroki @ git+https://github.com/chungmin99/pyroki.git@388e43e1fc0d0ee382968d3dd72970fd62a0450c",
+    # The URL pyroki requires (pip refuses a second, pinned URL for one package); tested at
+    # jaxls commit 50a58be88c5ef74532f09e3f55268b4f02c490e3.
+    "jaxls @ git+https://github.com/brentyi/jaxls.git",
+    "jaxlie>=1.5.0",
+    "yourdfpy>=0.0.60",
+    "jax[cpu]>=0.10.2",
+]
+# Mount calibration with the Quest controller: python -m dexport.calib.capture / .solve
+calib = ["dexport[deploy,collect]"]
+# Building blocks of the extras above (each version floor is stated once).
+policy = ["torch", "torchvision", "diffusers>=0.30"]  # the diffusion policy
+recordings = ["zarr>=2.18,<3", "natsort"]  # the zarr recordings
+hands = ["wujihandpy>=1.8", "wuji-sdk"]  # the Wuji 1 (USB) and Wuji 2 (Ethernet) drivers
+
+[tool.setuptools.packages.find]
+include = ["dexport*"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "EXE", "RUF100"]
+
+[tool.ruff.lint.per-file-ignores]
+# Isaac Lab scripts import Isaac modules only after AppLauncher has started the app.
+"sim/train.py" = ["E402"]
+"sim/eval.py" = ["E402"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["dexport", "rotation_env"]

@@ -1,0 +1,20 @@
+# Bimanual barcode scanning: two Wuji 2 hands, one wrist camera each.
+#   python -m dexport.collect --config configs/collect/wuji2_scan.yaml
+# All keys and defaults: dexport/collect/config.py.
+hand_model: wuji2
+hand:
+  # Each hand needs its own IP (defaults: left 192.168.1.110, right 192.168.1.111). Both ship as
+  # .111, so re-IP the left hand first. A side's address (default or `address: ip:port`) is used
+  # only when discovery finds no hand.
+  left: {enabled: true}
+  right: {enabled: true}
+cameras:  # index N = /dev/videoN (v4l2-ctl --list-devices); 224x224 @ 30 fps
+  - {key: left_rgb, index: 0}
+  - {key: right_rgb, index: 2}
+trajectory:
+  save_dir: data  # relative to the working directory
+  tag: scan
+  save_pose_l: true
+  save_quat_l: true
+  save_pose_r: true
+  save_quat_r: true

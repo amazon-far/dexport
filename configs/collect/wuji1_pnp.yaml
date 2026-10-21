@@ -1,0 +1,15 @@
+# Vegetable pick-and-place: Wuji 1, right hand, wrist camera.
+#   python -m dexport.collect --config configs/collect/wuji1_pnp.yaml
+# All keys and defaults: dexport/collect/config.py.
+hand_model: wuji1
+hand:
+  right: {enabled: true}  # with two Wuji 1 hands on the bus, give each side its `serial:`
+cameras:
+  - {key: right_rgb, index: 0}  # index N = /dev/videoN (v4l2-ctl --list-devices); 224x224 @ 30 fps
+trajectory:
+  save_dir: data  # relative to the working directory
+  tag: pnp
+  save_pose_l: false
+  save_quat_l: false
+  save_pose_r: true
+  save_quat_r: true
