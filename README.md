@@ -1,7 +1,7 @@
 # DexPort: A Hand-Held Skill Interface for Dexterous Hand Data Collection
 Official implementation of [DexPort](https://arxiv.org/abs/XXXX.XXXXX).
 
-\[[Paper](https://arxiv.org/abs/XXXX.XXXXX)\] \[[Website](https://amberxie88.github.io/dexport/index.html)\]
+\[[Paper](https://arxiv.org/abs/2610.32969)\] \[[Website](https://amberxie88.github.io/dexport/index.html)\]
 
 <img src="images/fig1.jpg" alt="DexPort" title="DexPort">
 
